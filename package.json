@@ -9,6 +9,9 @@
     "create:batch": "tsx factory/scripts/createBatch.ts",
     "qa": "tsx factory/scripts/qa.ts",
     "factory:daily": "tsx factory/scripts/factoryDaily.ts",
+    "agent:research": "tsx factory/scripts/agentResearch.ts",
+    "agent:daily": "tsx factory/scripts/agentDaily.ts",
+    "agent:review": "tsx factory/scripts/agentReview.ts",
     "typecheck": "tsc --noEmit",
     "build:sample": "tsx factory/scripts/buildSample.ts"
   },
@@ -19,4 +22,3 @@
     "zod": "^3.25.0"
   }
 }
-

@@ -9,3 +9,5 @@ Review current broad consumer and creator trends and propose 20 small utility we
 ## Consensus Scoring Prompt
 Score each idea from 1 to 5 on usefulness, trend fit, SEO clarity, build simplicity, and low-risk originality. Remove ideas that need official data, paid APIs, private account access, brand assets, or complex backend logic. Return the top five as JSON-ready brief notes.
 
+## Review Prompt
+Review these generated project summaries for usefulness, search intent, mobile UX, output clarity, FAQ quality, disclaimer coverage, and originality safety. Recommend only JSON brief edits unless the app fails build or the template is broken.

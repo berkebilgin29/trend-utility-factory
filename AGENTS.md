@@ -47,3 +47,10 @@
 - Record recurring build failures in `datasets/build-errors`.
 - Record useful fixes in `datasets/codex-fixes`.
 
+## Local Robot Workflow
+- Use `npm.cmd run agent:research` before asking Codex to invent ideas.
+- Use `npm.cmd run agent:daily -- --dry-run --count 4` to preview a daily batch.
+- Use `npm.cmd run agent:daily -- --count 4 --force` to let local robots write briefs and generate projects.
+- Use `npm.cmd run agent:review -- <slug>` before asking ChatGPT, Gemini, or Codex for final review.
+- Use ChatGPT and Gemini as idea/review councils by pasting agent outputs into the documented prompts; do not require paid APIs by default.
+- Use Ollama only when it is already installed and intentionally selected with `--provider ollama`.
