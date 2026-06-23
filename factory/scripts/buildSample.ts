@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 
 const generatedRoot = join(process.cwd(), "factory", "generated-projects");
+const slug = process.argv[2];
 if (!existsSync(generatedRoot)) {
   console.error("No generated projects folder found.");
   process.exit(1);
@@ -18,7 +19,12 @@ if (projects.length === 0) {
   process.exit(1);
 }
 
-const sample = projects[0];
+const sample = slug ? join(generatedRoot, slug) : projects[0];
+if (slug && (!existsSync(sample) || !statSync(sample).isDirectory())) {
+  console.error("Generated project not found for slug: " + slug);
+  process.exit(1);
+}
+
 console.log("Building sample generated project: " + sample);
 
 const install = runNpm(sample, ["install"]);
