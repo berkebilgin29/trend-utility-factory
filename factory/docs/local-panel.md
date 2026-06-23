@@ -1,26 +1,26 @@
-# Local Panel
+# Yerel Panel
 
-Run the local dashboard with:
+Yerel paneli calistir:
 
 ```powershell
 npm.cmd run panel
 ```
 
-Open:
+Tarayicida ac:
 
 ```text
 http://localhost:4177
 ```
 
-The panel shows:
-- daily brief count
-- generated project count
-- selected AI/provider per pipeline stage
-- estimated ChatGPT/Gemini manual-review tokens
-- local Ollama token estimate when selected
-- recent command output
-- buttons for research, dry-run daily production, daily generation, QA, review, and build
+Panel sunlari gosterir:
+- gunluk brief sayisi
+- uretilen proje sayisi
+- her asamada hangi yapay zeka/provider secildigi
+- ChatGPT/Gemini manuel inceleme icin tahmini token
+- Ollama secilirse tahmini yerel token
+- son calisan komutlar ve ciktilari
+- arastirma, prova, gunluk uretim, QA, review ve build butonlari
 
-Default behavior does not call paid APIs. ChatGPT and Gemini are represented as manual council stages so their token usage can be estimated before you paste prompts into those tools. Ollama can be selected when it is already running locally.
+Varsayilan davranis ucretli API cagrisi yapmaz. ChatGPT ve Gemini manuel konsey asamalari olarak gosterilir; panel bu araclara prompt yapistirmadan once yaklasik token maliyetini hesaplar. Ollama, yerelde zaten calisiyorsa secilebilir.
 
-The panel only runs whitelisted npm scripts inside this repository.
+Panel sadece bu repository icindeki izinli npm scriptlerini calistirir.

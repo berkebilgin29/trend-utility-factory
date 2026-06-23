@@ -1,53 +1,53 @@
 <!doctype html>
-<html lang="en">
+<html lang="tr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trend Utility Factory Panel</title>
+    <title>Trend Utility Factory Paneli</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <main class="shell">
       <header class="topbar">
         <div>
-          <p class="eyebrow">Local control panel</p>
+          <p class="eyebrow">Yerel kontrol paneli</p>
           <h1>Trend Utility Factory</h1>
-          <p class="subtle">Daily robot pipeline, provider choices, token estimates, QA and build status.</p>
+          <p class="subtle">Gunluk robot akisi, yapay zeka secimleri, token tahmini, QA ve build durumu.</p>
         </div>
-        <button id="refreshButton">Refresh</button>
+        <button id="refreshButton">Yenile</button>
       </header>
 
       <section class="grid hero-grid">
         <article class="panel">
-          <h2>Today</h2>
+          <h2>Bugun</h2>
           <div class="metric-row">
             <div>
               <span class="metric" id="briefCount">0</span>
-              <span class="label">daily briefs</span>
+              <span class="label">gunluk brief</span>
             </div>
             <div>
               <span class="metric" id="projectCount">0</span>
-              <span class="label">generated projects</span>
+              <span class="label">uretilen proje</span>
             </div>
           </div>
           <div class="actions">
-            <button data-action="research">Research</button>
-            <button data-action="dryDaily">Dry run</button>
-            <button data-action="generateDaily">Generate daily</button>
+            <button data-action="research">Arastir</button>
+            <button data-action="dryDaily">Prova yap</button>
+            <button data-action="generateDaily">Gunluk uret</button>
             <button data-action="qa">QA</button>
           </div>
         </article>
 
         <article class="panel accent">
-          <h2>Token Estimate</h2>
+          <h2>Token Tahmini</h2>
           <p class="large" id="totalTokens">0 tokens</p>
           <p id="tokenNote" class="subtle"></p>
           <div class="mini-grid">
-            <span>Per project</span>
+            <span>Proje basina</span>
             <strong id="perProjectTokens">0</strong>
-            <span>Paid API tokens</span>
+            <span>Ucretli API tokeni</span>
             <strong id="paidTokens">0</strong>
-            <span>Local Ollama tokens</span>
+            <span>Yerel Ollama tokeni</span>
             <strong id="localTokens">0</strong>
           </div>
         </article>
@@ -56,39 +56,38 @@
       <section class="panel">
         <div class="section-head">
           <div>
-            <h2>Pipeline Providers</h2>
-            <p class="subtle">Default setup avoids paid API calls. ChatGPT/Gemini are manual review stages unless you later wire explicit APIs.</p>
+            <h2>Asama ve Yapay Zeka Secimleri</h2>
+            <p class="subtle">Varsayilan kurulum ucretli API cagrisi yapmaz. ChatGPT/Gemini asamalari, sen API baglamadigin surece manuel inceleme adimidir.</p>
           </div>
-          <button id="saveConfigButton">Save config</button>
+          <button id="saveConfigButton">Ayarlari kaydet</button>
         </div>
         <div class="stage-grid" id="stageGrid"></div>
       </section>
 
       <section class="grid">
         <article class="panel">
-          <h2>Target Project</h2>
+          <h2>Hedef Proje</h2>
           <label class="field">
-            Project slug
+            Proje slug
             <select id="projectSelect"></select>
           </label>
           <div class="actions">
-            <button data-action="review">Review selected</button>
-            <button data-action="build">Build selected</button>
+            <button data-action="review">Secileni incele</button>
+            <button data-action="build">Secileni build et</button>
           </div>
         </article>
 
         <article class="panel">
-          <h2>Daily Briefs</h2>
+          <h2>Gunluk Briefler</h2>
           <ul id="briefList" class="list"></ul>
         </article>
       </section>
 
       <section class="panel">
-        <h2>Current / Recent Work</h2>
+        <h2>Su Anki / Son Isler</h2>
         <div id="jobs" class="jobs"></div>
       </section>
     </main>
     <script type="module" src="/app.js"></script>
   </body>
 </html>
-

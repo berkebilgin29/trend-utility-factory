@@ -1,21 +1,37 @@
 const stageLabels = {
-  trendResearch: "Trend research",
-  designResearch: "Design research",
-  ideaCouncil: "ChatGPT / Gemini idea council",
-  productionRobot: "Local production robot",
-  review: "Final review"
+  trendResearch: "Trend arastirmasi",
+  designResearch: "Tasarim arastirmasi",
+  ideaCouncil: "ChatGPT / Gemini fikir konseyi",
+  productionRobot: "Yerel uretim robotu",
+  review: "Son inceleme"
 };
 
 const providerOptions = [
-  ["local-agent", "Local agent"],
-  ["local-agent-live", "Local agent + free web/RSS"],
-  ["ollama", "Ollama local LLM"],
-  ["chatgpt-manual", "ChatGPT manual"],
-  ["gemini-manual", "Gemini manual"],
-  ["chatgpt-gemini-manual", "ChatGPT + Gemini manual"],
-  ["local-pattern-library", "Local design library"],
+  ["local-agent", "Yerel agent"],
+  ["local-agent-live", "Yerel agent + ucretsiz web/RSS"],
+  ["ollama", "Ollama yerel LLM"],
+  ["chatgpt-manual", "ChatGPT manuel"],
+  ["gemini-manual", "Gemini manuel"],
+  ["chatgpt-gemini-manual", "ChatGPT + Gemini manuel"],
+  ["local-pattern-library", "Yerel tasarim kutuphanesi"],
   ["factory-cli", "Factory CLI"]
 ];
+
+const statusLabels = {
+  running: "calisiyor",
+  passed: "basarili",
+  failed: "basarisiz"
+};
+
+const actionLabels = {
+  research: "Arastirma",
+  researchLive: "Canli arastirma",
+  dryDaily: "Gunluk prova",
+  generateDaily: "Gunluk uretim",
+  qa: "QA",
+  review: "Inceleme",
+  build: "Build"
+};
 
 let state = null;
 
@@ -37,7 +53,7 @@ async function refresh() {
 function render() {
   document.getElementById("briefCount").textContent = String(state.dailyBriefs.length);
   document.getElementById("projectCount").textContent = String(state.generatedProjects.length);
-  document.getElementById("totalTokens").textContent = formatNumber(state.estimates.totalExternalTokens) + " est. external tokens";
+  document.getElementById("totalTokens").textContent = formatNumber(state.estimates.totalExternalTokens) + " tahmini dis token";
   document.getElementById("perProjectTokens").textContent = formatNumber(state.estimates.averageExternalTokensPerProject);
   document.getElementById("paidTokens").textContent = formatNumber(state.estimates.paidApiTokens);
   document.getElementById("localTokens").textContent = formatNumber(state.estimates.localTokens);
@@ -98,7 +114,7 @@ function renderJobs() {
   const jobs = document.getElementById("jobs");
   jobs.innerHTML = "";
   if (state.jobs.length === 0) {
-    jobs.textContent = "No jobs yet.";
+    jobs.textContent = "Henuz is yok.";
     return;
   }
   for (const job of state.jobs) {
@@ -107,10 +123,10 @@ function renderJobs() {
     const header = document.createElement("div");
     header.className = "job-header";
     const title = document.createElement("span");
-    title.textContent = "#" + job.id + " " + job.action;
+    title.textContent = "#" + job.id + " " + (actionLabels[job.action] ?? job.action);
     const status = document.createElement("span");
     status.className = "status-" + job.status;
-    status.textContent = job.status;
+    status.textContent = statusLabels[job.status] ?? job.status;
     const output = document.createElement("pre");
     output.textContent = job.output.join("");
     header.append(title, status);
@@ -151,4 +167,3 @@ async function runAction(action) {
 function formatNumber(value) {
   return new Intl.NumberFormat("en-US").format(value);
 }
-

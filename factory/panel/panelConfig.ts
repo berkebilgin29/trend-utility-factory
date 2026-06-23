@@ -74,7 +74,7 @@ export function estimateTokens(config: PanelConfig) {
     averageExternalTokensPerProject: Math.round(totalExternalTokens / Math.max(1, config.dailyCount)),
     localTokens: usesOllama(config) ? Math.round((config.dailyCount * 1400 + 2200) / 100) * 100 : 0,
     paidApiTokens: 0,
-    note: "Default panel mode does not call paid APIs. ChatGPT/Gemini stages are manual copy-paste estimates unless you later add explicit API wiring."
+    note: "Varsayilan panel modu ucretli API cagrisi yapmaz. ChatGPT/Gemini asamalari, ileride acik API baglantisi eklenene kadar manuel kopyala-yapistir token tahminidir."
   };
 }
 
@@ -85,4 +85,3 @@ function usesManualExternal(provider: StageProvider): boolean {
 function usesOllama(config: PanelConfig): boolean {
   return Object.values(config.stages).includes("ollama");
 }
-
