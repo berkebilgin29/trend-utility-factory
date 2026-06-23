@@ -1,0 +1,64 @@
+{
+  "slug": "subscription-audits-tracker",
+  "productType": "tracker",
+  "title": "Subscription Audits Tracker",
+  "description": "Create a fast tracker for subscription cost tracker with practical inputs, clear output, FAQ, and shareable results.",
+  "keywords": [
+    "subscription cost tracker",
+    "monthly subscription calculator",
+    "streaming subscription cost"
+  ],
+  "audience": "General internet users searching for subscription cost tracker or monthly subscription calculator",
+  "trendAngle": "People keep searching for ways to understand recurring streaming, app, and AI-tool costs.",
+  "features": [
+    "Local saved values",
+    "Progress summary",
+    "Mobile-ready layout",
+    "Shareable result card"
+  ],
+  "inputs": [
+    {
+      "id": "amount-one",
+      "label": "Primary amount",
+      "type": "number",
+      "defaultValue": 100
+    },
+    {
+      "id": "amount-two",
+      "label": "Secondary amount",
+      "type": "number",
+      "defaultValue": 25
+    },
+    {
+      "id": "time-period",
+      "label": "Time period",
+      "type": "number",
+      "defaultValue": 12
+    }
+  ],
+  "outputs": [
+    {
+      "id": "result",
+      "label": "Calculated result"
+    },
+    {
+      "id": "summary",
+      "label": "Summary"
+    }
+  ],
+  "faq": [
+    {
+      "question": "Who is this tracker for?",
+      "answer": "It is for people who want a quick, practical answer around subscription cost tracker without creating an account."
+    },
+    {
+      "question": "Does this use external APIs?",
+      "answer": "No. The generated utility runs in the browser and does not need paid services or external accounts."
+    },
+    {
+      "question": "How should I use the result?",
+      "answer": "Use it as a planning estimate or decision aid, then verify important details with official sources when needed."
+    }
+  ],
+  "disclaimer": "This utility is for planning only and is not financial, legal, health, or official advice."
+}

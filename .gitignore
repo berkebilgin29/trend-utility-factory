@@ -6,3 +6,4 @@ factory/generated-projects/*/node_modules/
 factory/generated-projects/*/dist/
 factory/generated-projects/*/package-lock.json
 factory/panel/panel-config.json
+factory/panel/panel-state.json

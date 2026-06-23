@@ -64,6 +64,49 @@
         <div class="stage-grid" id="stageGrid"></div>
       </section>
 
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <h2>Otonom Gunluk Calisma</h2>
+            <p class="subtle">Panel acik kaldigi surece her gun belirlenen saatte arastirma, brief uretimi, QA, review ve build zincirini calistirir.</p>
+          </div>
+          <button data-action="autoDaily">Otomasyonu simdi calistir</button>
+        </div>
+        <div class="automation-grid">
+          <label class="toggle">
+            <input id="autoEnabled" type="checkbox" />
+            Otomasyon acik
+          </label>
+          <label class="field">
+            Gunluk saat
+            <input id="autoTime" type="time" />
+          </label>
+          <label class="field">
+            Gunluk proje sayisi
+            <input id="autoCount" type="number" min="1" max="5" />
+          </label>
+          <label class="field">
+            Uretim provider
+            <select id="autoProvider">
+              <option value="mock">Mock / yerel</option>
+              <option value="ollama">Ollama</option>
+            </select>
+          </label>
+          <label class="toggle">
+            <input id="autoLiveResearch" type="checkbox" />
+            Ucretsiz web/RSS sinyali kullan
+          </label>
+          <label class="toggle">
+            <input id="autoBuild" type="checkbox" />
+            Uretimden sonra build et
+          </label>
+        </div>
+        <div class="status-strip">
+          <span id="autoStatus">Otomasyon durumu yukleniyor.</span>
+          <span id="ollamaStatus">Ollama durumu yukleniyor.</span>
+        </div>
+      </section>
+
       <section class="grid">
         <article class="panel">
           <h2>Hedef Proje</h2>

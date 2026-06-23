@@ -14,6 +14,14 @@ export type StageProvider =
 export type PanelConfig = {
   dailyCount: number;
   selectedProjectSlug: string;
+  automation: {
+    enabled: boolean;
+    time: string;
+    count: number;
+    provider: "mock" | "ollama";
+    liveResearch: boolean;
+    buildAfterGenerate: boolean;
+  };
   stages: {
     trendResearch: StageProvider;
     designResearch: StageProvider;
@@ -33,6 +41,14 @@ const configPath = join(process.cwd(), "factory", "panel", "panel-config.json");
 export const defaultPanelConfig: PanelConfig = {
   dailyCount: 4,
   selectedProjectSlug: "phone-total-cost-calculator",
+  automation: {
+    enabled: true,
+    time: "09:00",
+    count: 4,
+    provider: "ollama",
+    liveResearch: false,
+    buildAfterGenerate: true
+  },
   stages: {
     trendResearch: "local-agent",
     designResearch: "local-pattern-library",
@@ -83,5 +99,5 @@ function usesManualExternal(provider: StageProvider): boolean {
 }
 
 function usesOllama(config: PanelConfig): boolean {
-  return Object.values(config.stages).includes("ollama");
+  return config.automation.provider === "ollama" || Object.values(config.stages).includes("ollama");
 }

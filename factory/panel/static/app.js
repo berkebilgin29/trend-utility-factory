@@ -30,7 +30,8 @@ const actionLabels = {
   generateDaily: "Gunluk uretim",
   qa: "QA",
   review: "Inceleme",
-  build: "Build"
+  build: "Build",
+  autoDaily: "Otonom gunluk calisma"
 };
 
 let state = null;
@@ -60,6 +61,7 @@ function render() {
   document.getElementById("tokenNote").textContent = state.estimates.note;
 
   renderStages();
+  renderAutomation();
   renderProjectSelect();
   renderBriefs();
   renderJobs();
@@ -85,6 +87,24 @@ function renderStages() {
     card.append(title, select);
     grid.append(card);
   }
+}
+
+function renderAutomation() {
+  document.getElementById("autoEnabled").checked = Boolean(state.config.automation.enabled);
+  document.getElementById("autoTime").value = state.config.automation.time;
+  document.getElementById("autoCount").value = String(state.config.automation.count);
+  document.getElementById("autoProvider").value = state.config.automation.provider;
+  document.getElementById("autoLiveResearch").checked = Boolean(state.config.automation.liveResearch);
+  document.getElementById("autoBuild").checked = Boolean(state.config.automation.buildAfterGenerate);
+
+  const last = state.automationState.lastAutoRunAt
+    ? "Son otomatik calisma: " + new Date(state.automationState.lastAutoRunAt).toLocaleString("tr-TR") + " / " + state.automationState.lastAutoRunStatus
+    : "Bugune kadar otomatik calisma kaydi yok.";
+  document.getElementById("autoStatus").textContent =
+    (state.config.automation.enabled ? "Otomasyon acik. " : "Otomasyon kapali. ") + "Saat: " + state.config.automation.time + ". " + last;
+
+  const models = state.ollama.models.length ? " Modeller: " + state.ollama.models.join(", ") : "";
+  document.getElementById("ollamaStatus").textContent = state.ollama.message + models;
 }
 
 function renderProjectSelect() {
@@ -138,6 +158,12 @@ function renderJobs() {
 async function saveConfig() {
   const config = structuredClone(state.config);
   config.selectedProjectSlug = document.getElementById("projectSelect").value || config.selectedProjectSlug;
+  config.automation.enabled = document.getElementById("autoEnabled").checked;
+  config.automation.time = document.getElementById("autoTime").value || config.automation.time;
+  config.automation.count = Number(document.getElementById("autoCount").value || config.automation.count);
+  config.automation.provider = document.getElementById("autoProvider").value;
+  config.automation.liveResearch = document.getElementById("autoLiveResearch").checked;
+  config.automation.buildAfterGenerate = document.getElementById("autoBuild").checked;
   document.querySelectorAll("[data-stage]").forEach((select) => {
     config.stages[select.dataset.stage] = select.value;
   });

@@ -29,59 +29,57 @@ type BriefData = {
 };
 
 const brief = {
-  "slug": "travel-packing-checklist",
-  "productType": "checklist",
-  "title": "Travel Packing Checklist",
-  "description": "Create a fast checklist for travel packing checklist with practical inputs, clear output, FAQ, and shareable results.",
+  "slug": "phone-installment-calculator",
+  "productType": "calculator",
+  "title": "Phone Installment Calculator",
+  "description": "Create a fast calculator for phone cost calculator with practical inputs, clear output, FAQ, and shareable results.",
   "keywords": [
-    "travel packing checklist",
-    "packing list generator",
-    "vacation packing checklist"
+    "phone cost calculator",
+    "monthly phone payment calculator",
+    "phone installment calculator"
   ],
-  "audience": "General internet users searching for travel packing checklist or packing list generator",
-  "trendAngle": "Travelers want simple checklists tailored by trip length, weather, and travel type.",
+  "audience": "General internet users searching for phone cost calculator or monthly phone payment calculator",
+  "trendAngle": "Phone buyers compare monthly payments, accessories, and total cost before upgrading.",
   "features": [
-    "Readiness checklist",
-    "Missing item prompts",
+    "Clear input math",
+    "Total estimate",
     "Mobile-ready layout",
     "Shareable result card"
   ],
   "inputs": [
     {
-      "id": "core-item",
-      "label": "Core item is ready",
-      "type": "checkbox",
-      "defaultValue": true
+      "id": "amount-one",
+      "label": "Primary amount",
+      "type": "number",
+      "defaultValue": 100
     },
     {
-      "id": "backup-item",
-      "label": "Backup item is ready",
-      "type": "checkbox",
-      "defaultValue": false
+      "id": "amount-two",
+      "label": "Secondary amount",
+      "type": "number",
+      "defaultValue": 25
     },
     {
-      "id": "special-context",
-      "label": "Special context",
-      "type": "select",
-      "options": [
-        "Standard",
-        "Budget",
-        "Time-sensitive",
-        "Family"
-      ],
-      "defaultValue": "Standard"
+      "id": "time-period",
+      "label": "Time period",
+      "type": "number",
+      "defaultValue": 12
     }
   ],
   "outputs": [
     {
-      "id": "readiness",
-      "label": "Readiness score"
+      "id": "result",
+      "label": "Calculated result"
+    },
+    {
+      "id": "summary",
+      "label": "Summary"
     }
   ],
   "faq": [
     {
-      "question": "Who is this checklist for?",
-      "answer": "It is for people who want a quick, practical answer around travel packing checklist without creating an account."
+      "question": "Who is this calculator for?",
+      "answer": "It is for people who want a quick, practical answer around phone cost calculator without creating an account."
     },
     {
       "question": "Does this use external APIs?",
@@ -92,13 +90,13 @@ const brief = {
       "answer": "Use it as a planning estimate or decision aid, then verify important details with official sources when needed."
     }
   ],
-  "disclaimer": "This utility is an informational planning aid. Verify important details before making decisions."
+  "disclaimer": "This utility is for planning only and is not financial, legal, health, or official advice."
 } as BriefData;
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "Travel Packing Checklist",
-  "description": "Create a fast checklist for travel packing checklist with practical inputs, clear output, FAQ, and shareable results.",
+  "name": "Phone Installment Calculator",
+  "description": "Create a fast calculator for phone cost calculator with practical inputs, clear output, FAQ, and shareable results.",
   "applicationCategory": "UtilityApplication",
   "operatingSystem": "Any",
   "offers": {
@@ -107,22 +105,22 @@ const jsonLd = {
     "priceCurrency": "USD"
   },
   "featureList": [
-    "Readiness checklist",
-    "Missing item prompts",
+    "Clear input math",
+    "Total estimate",
     "Mobile-ready layout",
     "Shareable result card"
   ],
   "audience": {
     "@type": "Audience",
-    "audienceType": "General internet users searching for travel packing checklist or packing list generator"
+    "audienceType": "General internet users searching for phone cost calculator or monthly phone payment calculator"
   },
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Who is this checklist for?",
+      "name": "Who is this calculator for?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It is for people who want a quick, practical answer around travel packing checklist without creating an account."
+        "text": "It is for people who want a quick, practical answer around phone cost calculator without creating an account."
       }
     },
     {

@@ -1,0 +1,66 @@
+{
+  "slug": "study-planning-planner",
+  "productType": "planner",
+  "title": "Study Planning Planner",
+  "description": "Create a fast planner for study plan generator with practical inputs, clear output, FAQ, and shareable results.",
+  "keywords": [
+    "study plan generator",
+    "exam study planner",
+    "daily study schedule"
+  ],
+  "audience": "General internet users searching for study plan generator or exam study planner",
+  "trendAngle": "Students need quick exam planning tools that turn dates and hours into a schedule.",
+  "features": [
+    "Simple plan output",
+    "Constraint summary",
+    "Mobile-ready layout",
+    "Shareable result card"
+  ],
+  "inputs": [
+    {
+      "id": "goal",
+      "label": "Study Planning goal",
+      "type": "text",
+      "placeholder": "Enter the main goal"
+    },
+    {
+      "id": "days",
+      "label": "Days available",
+      "type": "number",
+      "defaultValue": 7
+    },
+    {
+      "id": "priority",
+      "label": "Priority",
+      "type": "select",
+      "options": [
+        "Balanced",
+        "Fast",
+        "Budget",
+        "Detailed"
+      ],
+      "defaultValue": "Balanced"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "plan",
+      "label": "Generated plan"
+    }
+  ],
+  "faq": [
+    {
+      "question": "Who is this planner for?",
+      "answer": "It is for people who want a quick, practical answer around study plan generator without creating an account."
+    },
+    {
+      "question": "Does this use external APIs?",
+      "answer": "No. The generated utility runs in the browser and does not need paid services or external accounts."
+    },
+    {
+      "question": "How should I use the result?",
+      "answer": "Use it as a planning estimate or decision aid, then verify important details with official sources when needed."
+    }
+  ],
+  "disclaimer": "This utility is an informational planning aid. Verify important details before making decisions."
+}

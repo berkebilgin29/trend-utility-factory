@@ -165,6 +165,43 @@ h2 {
   gap: 12px;
 }
 
+.automation-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.toggle input {
+  width: 18px;
+  height: 18px;
+}
+
+.status-strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.status-strip span {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 10px 12px;
+  color: var(--muted);
+}
+
 .stage-card {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -246,8 +283,9 @@ h2 {
   }
 
   .grid,
-  .stage-grid {
+  .stage-grid,
+  .automation-grid,
+  .status-strip {
     grid-template-columns: 1fr;
   }
 }
-

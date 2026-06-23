@@ -29,59 +29,59 @@ type BriefData = {
 };
 
 const brief = {
-  "slug": "travel-packing-checklist",
-  "productType": "checklist",
-  "title": "Travel Packing Checklist",
-  "description": "Create a fast checklist for travel packing checklist with practical inputs, clear output, FAQ, and shareable results.",
+  "slug": "study-planning-planner",
+  "productType": "planner",
+  "title": "Study Planning Planner",
+  "description": "Create a fast planner for study plan generator with practical inputs, clear output, FAQ, and shareable results.",
   "keywords": [
-    "travel packing checklist",
-    "packing list generator",
-    "vacation packing checklist"
+    "study plan generator",
+    "exam study planner",
+    "daily study schedule"
   ],
-  "audience": "General internet users searching for travel packing checklist or packing list generator",
-  "trendAngle": "Travelers want simple checklists tailored by trip length, weather, and travel type.",
+  "audience": "General internet users searching for study plan generator or exam study planner",
+  "trendAngle": "Students need quick exam planning tools that turn dates and hours into a schedule.",
   "features": [
-    "Readiness checklist",
-    "Missing item prompts",
+    "Simple plan output",
+    "Constraint summary",
     "Mobile-ready layout",
     "Shareable result card"
   ],
   "inputs": [
     {
-      "id": "core-item",
-      "label": "Core item is ready",
-      "type": "checkbox",
-      "defaultValue": true
+      "id": "goal",
+      "label": "Study Planning goal",
+      "type": "text",
+      "placeholder": "Enter the main goal"
     },
     {
-      "id": "backup-item",
-      "label": "Backup item is ready",
-      "type": "checkbox",
-      "defaultValue": false
+      "id": "days",
+      "label": "Days available",
+      "type": "number",
+      "defaultValue": 7
     },
     {
-      "id": "special-context",
-      "label": "Special context",
+      "id": "priority",
+      "label": "Priority",
       "type": "select",
       "options": [
-        "Standard",
+        "Balanced",
+        "Fast",
         "Budget",
-        "Time-sensitive",
-        "Family"
+        "Detailed"
       ],
-      "defaultValue": "Standard"
+      "defaultValue": "Balanced"
     }
   ],
   "outputs": [
     {
-      "id": "readiness",
-      "label": "Readiness score"
+      "id": "plan",
+      "label": "Generated plan"
     }
   ],
   "faq": [
     {
-      "question": "Who is this checklist for?",
-      "answer": "It is for people who want a quick, practical answer around travel packing checklist without creating an account."
+      "question": "Who is this planner for?",
+      "answer": "It is for people who want a quick, practical answer around study plan generator without creating an account."
     },
     {
       "question": "Does this use external APIs?",
@@ -97,8 +97,8 @@ const brief = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "Travel Packing Checklist",
-  "description": "Create a fast checklist for travel packing checklist with practical inputs, clear output, FAQ, and shareable results.",
+  "name": "Study Planning Planner",
+  "description": "Create a fast planner for study plan generator with practical inputs, clear output, FAQ, and shareable results.",
   "applicationCategory": "UtilityApplication",
   "operatingSystem": "Any",
   "offers": {
@@ -107,22 +107,22 @@ const jsonLd = {
     "priceCurrency": "USD"
   },
   "featureList": [
-    "Readiness checklist",
-    "Missing item prompts",
+    "Simple plan output",
+    "Constraint summary",
     "Mobile-ready layout",
     "Shareable result card"
   ],
   "audience": {
     "@type": "Audience",
-    "audienceType": "General internet users searching for travel packing checklist or packing list generator"
+    "audienceType": "General internet users searching for study plan generator or exam study planner"
   },
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Who is this checklist for?",
+      "name": "Who is this planner for?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It is for people who want a quick, practical answer around travel packing checklist without creating an account."
+        "text": "It is for people who want a quick, practical answer around study plan generator without creating an account."
       }
     },
     {

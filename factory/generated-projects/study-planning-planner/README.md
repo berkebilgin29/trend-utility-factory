@@ -1,6 +1,6 @@
-# Travel Packing Checklist
+# Study Planning Planner
 
-Create a fast checklist for travel packing checklist with practical inputs, clear output, FAQ, and shareable results.
+Create a fast planner for study plan generator with practical inputs, clear output, FAQ, and shareable results.
 
 ## Local commands
 - `npm.cmd install`

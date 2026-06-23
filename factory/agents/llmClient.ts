@@ -25,7 +25,7 @@ export function createLlmClient(provider: LlmProvider = "mock"): LlmClient {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
-            model: request.model ?? "llama3.1",
+            model: request.model ?? process.env.OLLAMA_MODEL ?? "qwen2.5:1.5b",
             messages: request.messages,
             stream: false,
             options: { temperature: request.temperature ?? 0.3 }
@@ -61,4 +61,3 @@ export function createLlmClient(provider: LlmProvider = "mock"): LlmClient {
     }
   };
 }
-

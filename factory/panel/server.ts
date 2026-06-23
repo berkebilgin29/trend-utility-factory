@@ -1,5 +1,5 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { extname, join } from "node:path";
 import { spawn } from "node:child_process";
 import { estimateTokens, readPanelConfig, writePanelConfig, type PanelConfig } from "./panelConfig.js";
@@ -13,19 +13,28 @@ type Job = {
   output: string[];
 };
 
+type PanelState = {
+  lastAutoRunDate?: string;
+  lastAutoRunStatus?: "passed" | "failed";
+  lastAutoRunAt?: string;
+};
+
 const port = Number(process.env.PORT ?? 4177);
 const panelRoot = join(process.cwd(), "factory", "panel", "static");
+const statePath = join(process.cwd(), "factory", "panel", "panel-state.json");
 const jobs: Job[] = [];
 let nextJobId = 1;
+let autoRunInProgress = false;
 
-const actions: Record<string, (body: Record<string, unknown>) => { command: string; args: string[] }> = {
-  research: () => ({ command: "npm.cmd", args: ["run", "agent:research"] }),
-  researchLive: () => ({ command: "npm.cmd", args: ["run", "agent:research", "--", "--live"] }),
-  dryDaily: (body) => ({ command: "npm.cmd", args: ["run", "agent:daily", "--", "--dry-run", "--count", String(body.count ?? 4)] }),
-  generateDaily: (body) => ({ command: "npm.cmd", args: ["run", "agent:daily", "--", "--count", String(body.count ?? 4), "--force"] }),
-  qa: () => ({ command: "npm.cmd", args: ["run", "qa"] }),
-  review: (body) => ({ command: "npm.cmd", args: ["run", "agent:review", "--", String(body.slug ?? "phone-total-cost-calculator")] }),
-  build: (body) => ({ command: "npm.cmd", args: ["run", "build:sample", "--", String(body.slug ?? "phone-total-cost-calculator")] })
+const actions: Record<string, (body: Record<string, unknown>) => { command: string; args: string[] }[]> = {
+  research: () => [{ command: "npm.cmd", args: ["run", "agent:research"] }],
+  researchLive: () => [{ command: "npm.cmd", args: ["run", "agent:research", "--", "--live"] }],
+  dryDaily: (body) => [{ command: "npm.cmd", args: ["run", "agent:daily", "--", "--dry-run", "--count", String(body.count ?? 4)] }],
+  generateDaily: (body) => [{ command: "npm.cmd", args: ["run", "agent:daily", "--", "--count", String(body.count ?? 4), "--force"] }],
+  qa: () => [{ command: "npm.cmd", args: ["run", "qa"] }],
+  review: (body) => [{ command: "npm.cmd", args: ["run", "agent:review", "--", String(body.slug ?? "phone-total-cost-calculator")] }],
+  build: (body) => [{ command: "npm.cmd", args: ["run", "build:sample", "--", String(body.slug ?? "phone-total-cost-calculator")] }],
+  autoDaily: (body) => buildAutoDailyCommands(readPanelConfig(), String(body.slug ?? readPanelConfig().selectedProjectSlug))
 };
 
 const server = createServer(async (request, response) => {
@@ -37,6 +46,8 @@ const server = createServer(async (request, response) => {
       return sendJson(response, {
         config: readPanelConfig(),
         estimates: estimateTokens(readPanelConfig()),
+        automationState: readPanelState(),
+        ollama: await getOllamaStatus(),
         dailyBriefs: listJsonNames(join(process.cwd(), "factory", "briefs", "daily")),
         generatedProjects: listFolders(join(process.cwd(), "factory", "generated-projects")),
         jobs: jobs.slice(-10).reverse()
@@ -68,34 +79,126 @@ server.listen(port, () => {
   console.log("Trend Utility Factory panel running at http://localhost:" + port);
 });
 
-function runJob(action: string, commandSpec: { command: string; args: string[] }): Job {
+setInterval(() => {
+  void maybeRunDailyAutomation();
+}, 60_000);
+void maybeRunDailyAutomation();
+
+function runJob(action: string, commandSpecs: { command: string; args: string[] }[], onFinish?: (status: "passed" | "failed") => void): Job {
   const job: Job = { id: nextJobId++, action, status: "running", startedAt: new Date().toISOString(), output: [] };
   jobs.push(job);
-  const child =
-    process.platform === "win32"
-      ? spawn("cmd.exe", ["/d", "/s", "/c", commandSpec.command, ...commandSpec.args], { cwd: process.cwd(), shell: false })
-      : spawn(commandSpec.command.replace(/\.cmd$/, ""), commandSpec.args, { cwd: process.cwd(), shell: false });
 
-  child.stdout.on("data", (chunk) => pushOutput(job, chunk));
-  child.stderr.on("data", (chunk) => pushOutput(job, chunk));
-  child.on("close", (code) => {
-    job.status = code === 0 ? "passed" : "failed";
+  void runCommandSequence(job, commandSpecs).then((status) => {
+    job.status = status;
     job.finishedAt = new Date().toISOString();
-    pushOutput(job, "\n[exit " + code + "]");
-  });
-  child.on("error", (error) => {
-    job.status = "failed";
-    job.finishedAt = new Date().toISOString();
-    pushOutput(job, error.message);
+    onFinish?.(status);
   });
 
   return job;
+}
+
+async function runCommandSequence(job: Job, commandSpecs: { command: string; args: string[] }[]): Promise<"passed" | "failed"> {
+  for (const commandSpec of commandSpecs) {
+    pushOutput(job, "\n$ " + commandSpec.command + " " + commandSpec.args.join(" ") + "\n");
+    const code = await runOneCommand(job, commandSpec);
+    pushOutput(job, "\n[exit " + code + "]\n");
+    if (code !== 0) return "failed";
+  }
+  return "passed";
+}
+
+function runOneCommand(job: Job, commandSpec: { command: string; args: string[] }): Promise<number> {
+  return new Promise((resolve) => {
+    const child =
+      process.platform === "win32"
+        ? spawn("cmd.exe", ["/d", "/s", "/c", commandSpec.command, ...commandSpec.args], { cwd: process.cwd(), shell: false })
+        : spawn(commandSpec.command.replace(/\.cmd$/, ""), commandSpec.args, { cwd: process.cwd(), shell: false });
+
+    child.stdout.on("data", (chunk) => pushOutput(job, chunk));
+    child.stderr.on("data", (chunk) => pushOutput(job, chunk));
+    child.on("close", (code) => resolve(code ?? 1));
+    child.on("error", (error) => {
+      pushOutput(job, error.message);
+      resolve(1);
+    });
+  });
 }
 
 function pushOutput(job: Job, chunk: unknown): void {
   const text = Buffer.isBuffer(chunk) ? chunk.toString("utf8") : String(chunk);
   job.output.push(text);
   if (job.output.length > 80) job.output.splice(0, job.output.length - 80);
+}
+
+async function maybeRunDailyAutomation(): Promise<void> {
+  const config = readPanelConfig();
+  if (!config.automation.enabled || autoRunInProgress) return;
+  const now = new Date();
+  const today = now.toISOString().slice(0, 10);
+  const currentTime = now.toTimeString().slice(0, 5);
+  const state = readPanelState();
+  if (state.lastAutoRunDate === today || currentTime < config.automation.time) return;
+
+  autoRunInProgress = true;
+  runJob("autoDaily", buildAutoDailyCommands(config, config.selectedProjectSlug), (status) => {
+    writePanelState({ lastAutoRunDate: today, lastAutoRunStatus: status, lastAutoRunAt: new Date().toISOString() });
+    autoRunInProgress = false;
+  });
+}
+
+function buildAutoDailyCommands(config: PanelConfig, slug: string): { command: string; args: string[] }[] {
+  const commands = [
+    { command: "npm.cmd", args: ["run", "agent:research", ...(config.automation.liveResearch ? ["--", "--live"] : [])] },
+    {
+      command: "npm.cmd",
+      args: [
+        "run",
+        "agent:daily",
+        "--",
+        "--count",
+        String(config.automation.count),
+        "--provider",
+        config.automation.provider,
+        "--force",
+        ...(config.automation.liveResearch ? ["--live"] : [])
+      ]
+    },
+    { command: "npm.cmd", args: ["run", "qa"] },
+    { command: "npm.cmd", args: ["run", "agent:review", "--", slug] }
+  ];
+  if (config.automation.buildAfterGenerate) {
+    commands.push({ command: "npm.cmd", args: ["run", "build:sample", "--", slug] });
+  }
+  return commands;
+}
+
+function readPanelState(): PanelState {
+  if (!existsSync(statePath)) return {};
+  try {
+    return JSON.parse(readFileSync(statePath, "utf8")) as PanelState;
+  } catch {
+    return {};
+  }
+}
+
+function writePanelState(state: PanelState): void {
+  writeFileSync(statePath, JSON.stringify(state, null, 2) + "\n", "utf8");
+}
+
+async function getOllamaStatus(): Promise<{ reachable: boolean; models: string[]; message: string }> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 700);
+  try {
+    const response = await fetch("http://localhost:11434/api/tags", { signal: controller.signal });
+    if (!response.ok) return { reachable: false, models: [], message: "Ollama cevap verdi ama model listesi alinamadi." };
+    const json = (await response.json()) as { models?: { name?: string }[] };
+    const models = (json.models ?? []).map((model) => model.name ?? "").filter(Boolean);
+    return { reachable: true, models, message: models.length ? "Ollama calisiyor." : "Ollama calisiyor ama model listesi bos." };
+  } catch {
+    return { reachable: false, models: [], message: "Ollama calismiyor veya localhost:11434 ulasilamiyor." };
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 function serveStatic(pathname: string, response: ServerResponse): void {

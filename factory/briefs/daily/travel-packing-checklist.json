@@ -2,26 +2,65 @@
   "slug": "travel-packing-checklist",
   "productType": "checklist",
   "title": "Travel Packing Checklist",
-  "description": "Generate a practical packing checklist based on trip length, expected weather, and travel type.",
-  "keywords": ["travel packing checklist", "packing list generator", "vacation packing checklist"],
-  "audience": "Travelers preparing for vacations, work trips, weekend breaks, and family travel",
-  "trendAngle": "People are searching for faster personalized packing lists as travel rebounds and baggage fees stay high.",
-  "features": ["Trip-based checklist", "Weather-aware packing prompts", "Travel-type reminder score", "Printable checklist style"],
+  "description": "Create a fast checklist for travel packing checklist with practical inputs, clear output, FAQ, and shareable results.",
+  "keywords": [
+    "travel packing checklist",
+    "packing list generator",
+    "vacation packing checklist"
+  ],
+  "audience": "General internet users searching for travel packing checklist or packing list generator",
+  "trendAngle": "Travelers want simple checklists tailored by trip length, weather, and travel type.",
+  "features": [
+    "Readiness checklist",
+    "Missing item prompts",
+    "Mobile-ready layout",
+    "Shareable result card"
+  ],
   "inputs": [
-    { "id": "trip-days", "label": "Trip length in days", "type": "number", "defaultValue": 5 },
-    { "id": "weather", "label": "Expected weather", "type": "select", "options": ["Warm", "Cold", "Rainy", "Mixed"], "defaultValue": "Mixed" },
-    { "id": "travel-type", "label": "Travel type", "type": "select", "options": ["Vacation", "Business", "Family", "Weekend"], "defaultValue": "Vacation" },
-    { "id": "carry-on-only", "label": "Carry-on only", "type": "checkbox", "defaultValue": false }
+    {
+      "id": "core-item",
+      "label": "Core item is ready",
+      "type": "checkbox",
+      "defaultValue": true
+    },
+    {
+      "id": "backup-item",
+      "label": "Backup item is ready",
+      "type": "checkbox",
+      "defaultValue": false
+    },
+    {
+      "id": "special-context",
+      "label": "Special context",
+      "type": "select",
+      "options": [
+        "Standard",
+        "Budget",
+        "Time-sensitive",
+        "Family"
+      ],
+      "defaultValue": "Standard"
+    }
   ],
   "outputs": [
-    { "id": "packing-score", "label": "Packing readiness score" },
-    { "id": "packing-reminders", "label": "Packing reminder list" }
+    {
+      "id": "readiness",
+      "label": "Readiness score"
+    }
   ],
   "faq": [
-    { "question": "Can this replace a full travel checklist?", "answer": "It gives a fast starting point, but you should still add destination-specific items, documents, medication, and chargers." },
-    { "question": "Does this know airline baggage rules?", "answer": "No. Check your airline and destination rules before packing liquids, batteries, or restricted items." },
-    { "question": "Is the list saved?", "answer": "The generated app stores your current checklist values locally in the browser." }
+    {
+      "question": "Who is this checklist for?",
+      "answer": "It is for people who want a quick, practical answer around travel packing checklist without creating an account."
+    },
+    {
+      "question": "Does this use external APIs?",
+      "answer": "No. The generated utility runs in the browser and does not need paid services or external accounts."
+    },
+    {
+      "question": "How should I use the result?",
+      "answer": "Use it as a planning estimate or decision aid, then verify important details with official sources when needed."
+    }
   ],
-  "disclaimer": "This checklist is a planning aid only. Always verify airline, destination, weather, document, and safety requirements before travel."
+  "disclaimer": "This utility is an informational planning aid. Verify important details before making decisions."
 }
-
