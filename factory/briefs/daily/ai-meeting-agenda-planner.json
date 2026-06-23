@@ -1,0 +1,50 @@
+{
+  "slug": "ai-meeting-agenda-planner",
+  "productType": "planner",
+  "title": "AI Meeting Agenda Planner",
+  "description": "Draft a structured meeting plan with goal, context, decision, and follow-up blocks.",
+  "keywords": [
+    "meeting planner",
+    "AI agenda",
+    "agenda builder",
+    "team productivity"
+  ],
+  "audience": "Teams preparing concise meetings",
+  "trendAngle": "AI-assisted work makes structured meeting inputs more valuable.",
+  "features": [
+    "Agenda outline",
+    "Decision prompt",
+    "Follow-up section"
+  ],
+  "inputs": [
+    {
+      "id": "topic",
+      "label": "Meeting topic",
+      "type": "text",
+      "placeholder": "Roadmap review"
+    },
+    {
+      "id": "duration",
+      "label": "Minutes available",
+      "type": "number",
+      "defaultValue": 30
+    }
+  ],
+  "outputs": [
+    {
+      "id": "plan",
+      "label": "Meeting plan"
+    }
+  ],
+  "faq": [
+    {
+      "question": "Can this be used without AI tools?",
+      "answer": "Yes. It creates a human-readable agenda structure."
+    },
+    {
+      "question": "Does it connect to my calendar?",
+      "answer": "No. It runs locally and does not access external accounts."
+    }
+  ],
+  "disclaimer": "Review agendas for accuracy before sending to attendees."
+}

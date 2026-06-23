@@ -1,0 +1,25 @@
+{
+  "slug": "subscription-cost-calculator",
+  "productType": "calculator",
+  "title": "Subscription Cost Calculator",
+  "description": "Estimate monthly and annual subscription spend across streaming, AI, cloud, and creator tools.",
+  "keywords": ["subscription calculator", "monthly cost", "budget tool", "saas spend"],
+  "audience": "People auditing recurring digital subscriptions",
+  "trendAngle": "Consumers are trimming recurring AI, streaming, and creator-tool subscriptions.",
+  "features": ["Monthly total", "Annual projection", "Quick share card"],
+  "inputs": [
+    { "id": "streaming", "label": "Streaming apps monthly cost", "type": "number", "defaultValue": 25 },
+    { "id": "ai-tools", "label": "AI tools monthly cost", "type": "number", "defaultValue": 20 },
+    { "id": "cloud-apps", "label": "Cloud and creator tools monthly cost", "type": "number", "defaultValue": 15 }
+  ],
+  "outputs": [
+    { "id": "monthly-total", "label": "Monthly total" },
+    { "id": "annual-total", "label": "Annual total" }
+  ],
+  "faq": [
+    { "question": "What subscriptions should I include?", "answer": "Include any recurring app, streaming, cloud, AI, creator, or membership payment." },
+    { "question": "Is this financial advice?", "answer": "No. It is a simple planning estimate to help you review recurring costs." }
+  ],
+  "disclaimer": "This calculator is for planning only and is not financial advice."
+}
+

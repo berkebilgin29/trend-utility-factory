@@ -1,0 +1,466 @@
+import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import type { Brief } from "./briefSchema.js";
+import { buildSeoBundle } from "./seoAgent.js";
+import { selectTemplate } from "./templateSelector.js";
+
+export type GenerateProjectOptions = {
+  repoRoot?: string;
+  force?: boolean;
+};
+
+export type GenerateProjectResult = {
+  slug: string;
+  projectPath: string;
+  skipped: boolean;
+};
+
+export function generateProject(brief: Brief, options: GenerateProjectOptions = {}): GenerateProjectResult {
+  const repoRoot = options.repoRoot ?? process.cwd();
+  selectTemplate(brief, repoRoot);
+  const projectPath = join(repoRoot, "factory", "generated-projects", brief.slug);
+
+  if (existsSync(projectPath)) {
+    if (!options.force) {
+      return { slug: brief.slug, projectPath, skipped: true };
+    }
+    rmSync(projectPath, { recursive: true, force: true });
+  }
+
+  mkdirSync(join(projectPath, "src"), { recursive: true });
+  mkdirSync(join(projectPath, "public"), { recursive: true });
+
+  const seo = buildSeoBundle(brief);
+  writeJson(join(projectPath, "package.json"), generatedPackageJson(brief));
+  writeFileSync(join(projectPath, "README.md"), generatedReadme(brief), "utf8");
+  writeFileSync(join(projectPath, "index.html"), generatedIndexHtml(brief), "utf8");
+  writeFileSync(join(projectPath, "src", "main.tsx"), generatedMainTsx(), "utf8");
+  writeFileSync(join(projectPath, "src", "App.tsx"), generatedAppTsx(brief, seo.jsonLd), "utf8");
+  writeFileSync(join(projectPath, "src", "styles.css"), generatedStyles(), "utf8");
+  writeFileSync(join(projectPath, "vite.config.ts"), generatedViteConfig(), "utf8");
+  writeJson(join(projectPath, "tsconfig.json"), generatedTsconfig());
+  writeFileSync(join(projectPath, "tailwind.config.js"), generatedTailwindConfig(), "utf8");
+  writeFileSync(join(projectPath, "postcss.config.js"), generatedPostcssConfig(), "utf8");
+  writeFileSync(join(projectPath, "public", "sitemap.xml"), seo.sitemap, "utf8");
+  writeFileSync(join(projectPath, "public", "robots.txt"), seo.robots, "utf8");
+
+  return { slug: brief.slug, projectPath, skipped: false };
+}
+
+function writeJson(path: string, value: unknown): void {
+  writeFileSync(path, JSON.stringify(value, null, 2) + "\n", "utf8");
+}
+
+function generatedPackageJson(brief: Brief): Record<string, unknown> {
+  return {
+    name: brief.slug,
+    version: "0.1.0",
+    private: true,
+    type: "module",
+    scripts: {
+      dev: "vite",
+      build: "tsc --noEmit && vite build",
+      preview: "vite preview",
+      typecheck: "tsc --noEmit"
+    },
+    dependencies: {
+      "@vitejs/plugin-react": "^4.3.4",
+      "@types/react": "^18.3.12",
+      "@types/react-dom": "^18.3.1",
+      "autoprefixer": "^10.4.20",
+      "html-to-image": "^1.11.11",
+      "lucide-react": "^0.468.0",
+      "postcss": "^8.4.49",
+      "react": "^18.3.1",
+      "react-dom": "^18.3.1",
+      "tailwindcss": "^3.4.17",
+      "typescript": "^5.8.0",
+      "vite": "^5.4.11"
+    }
+  };
+}
+
+function generatedReadme(brief: Brief): string {
+  return [
+    "# " + brief.title,
+    "",
+    brief.description,
+    "",
+    "## Local commands",
+    "- `npm.cmd install`",
+    "- `npm.cmd run build`",
+    "- `npm.cmd run dev`",
+    "",
+    "## Notes",
+    "- Generated from a JSON brief by the Trend Utility Factory.",
+    "- Runs without external APIs.",
+    "- " + brief.disclaimer,
+    ""
+  ].join("\n");
+}
+
+function generatedIndexHtml(brief: Brief): string {
+  return [
+    "<!doctype html>",
+    '<html lang="en">',
+    "  <head>",
+    '    <meta charset="UTF-8" />',
+    '    <meta name="viewport" content="width=device-width, initial-scale=1.0" />',
+    "    <title>" + escapeHtml(brief.title) + "</title>",
+    '    <meta name="description" content="' + escapeHtml(brief.description) + '" />',
+    '    <meta name="keywords" content="' + escapeHtml(brief.keywords.join(", ")) + '" />',
+    "  </head>",
+    "  <body>",
+    '    <div id="root"></div>',
+    '    <script type="module" src="/src/main.tsx"></script>',
+    "  </body>",
+    "</html>",
+    ""
+  ].join("\n");
+}
+
+function generatedMainTsx(): string {
+  return [
+    'import React from "react";',
+    'import ReactDOM from "react-dom/client";',
+    'import App from "./App";',
+    'import "./styles.css";',
+    "",
+    'ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(',
+    "  <React.StrictMode>",
+    "    <App />",
+    "  </React.StrictMode>",
+    ");",
+    ""
+  ].join("\n");
+}
+
+function generatedAppTsx(brief: Brief, jsonLd: Record<string, unknown>): string {
+  return `import { useEffect, useMemo, useRef, useState } from "react";
+import { Download, RefreshCcw, Share2, Sparkles } from "lucide-react";
+import { toPng } from "html-to-image";
+
+type FieldValue = string | number | boolean;
+type InputDefinition = {
+  id: string;
+  label: string;
+  type: "number" | "text" | "select" | "checkbox";
+  placeholder?: string;
+  options?: string[];
+  defaultValue?: FieldValue;
+};
+type OutputDefinition = { id: string; label: string; description?: string };
+type FaqItem = { question: string; answer: string };
+type BriefData = {
+  slug: string;
+  productType: string;
+  title: string;
+  description: string;
+  keywords: string[];
+  audience: string;
+  trendAngle: string;
+  features: string[];
+  inputs: InputDefinition[];
+  outputs: OutputDefinition[];
+  faq: FaqItem[];
+  disclaimer: string;
+};
+
+const brief = ${JSON.stringify(brief, null, 2)} as BriefData;
+const jsonLd = ${JSON.stringify(jsonLd, null, 2)};
+const STORAGE_KEY = "trend-utility:" + brief.slug;
+
+type Result = {
+  headline: string;
+  detail: string;
+  score: string;
+};
+
+function createDefaultValues(): Record<string, FieldValue> {
+  return Object.fromEntries(
+    brief.inputs.map((input) => {
+      if (input.defaultValue !== undefined) return [input.id, input.defaultValue];
+      if (input.type === "checkbox") return [input.id, false];
+      if (input.type === "number") return [input.id, 0];
+      if (input.type === "select") return [input.id, input.options?.[0] ?? ""];
+      return [input.id, ""];
+    })
+  );
+}
+
+function readStoredValues(): Record<string, FieldValue> {
+  if (typeof window === "undefined") return createDefaultValues();
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    return stored ? { ...createDefaultValues(), ...JSON.parse(stored) } : createDefaultValues();
+  } catch {
+    return createDefaultValues();
+  }
+}
+
+function App() {
+  const [values, setValues] = useState<Record<string, FieldValue>>(readStoredValues);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const result = useMemo(() => computeResult(brief.productType, values), [values]);
+
+  useEffect(() => {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(values));
+  }, [values]);
+
+  function updateValue(id: string, value: FieldValue) {
+    setValues((current) => ({ ...current, [id]: value }));
+  }
+
+  async function downloadCard() {
+    if (!cardRef.current) return;
+    const dataUrl = await toPng(cardRef.current, { pixelRatio: 2, backgroundColor: "#f8fafc" });
+    const link = document.createElement("a");
+    link.download = brief.slug + "-share-card.png";
+    link.href = dataUrl;
+    link.click();
+  }
+
+  function resetValues() {
+    setValues(createDefaultValues());
+  }
+
+  return (
+    <main className="min-h-screen bg-slate-50 text-slate-950">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <section className="mx-auto grid w-full max-w-6xl gap-6 px-4 py-6 md:grid-cols-[1fr_0.85fr] md:px-8">
+        <div className="space-y-5">
+          <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
+              <Sparkles size={16} />
+              {brief.productType.split("-").join(" ")}
+            </div>
+            <h1 className="text-3xl font-bold tracking-normal text-slate-950 md:text-4xl">{brief.title}</h1>
+            <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">{brief.description}</p>
+          </div>
+
+          <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+            <h2 className="text-lg font-semibold">Inputs</h2>
+            <div className="mt-4 grid gap-4">
+              {brief.inputs.map((input) => (
+                <label key={input.id} className="grid gap-2 text-sm font-medium text-slate-700">
+                  {input.label}
+                  {renderInput(input, values[input.id], updateValue)}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+            <h2 className="text-lg font-semibold">FAQ</h2>
+            <div className="mt-3 grid gap-3">
+              {brief.faq.map((item) => (
+                <details key={item.question} className="rounded-md border border-slate-200 p-3">
+                  <summary className="cursor-pointer font-medium">{item.question}</summary>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">{item.answer}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <aside className="space-y-5">
+          <div ref={cardRef} className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-lg font-semibold">Result</h2>
+              <Share2 size={20} className="text-emerald-600" />
+            </div>
+            <p className="mt-5 text-3xl font-bold text-slate-950">{result.headline}</p>
+            <p className="mt-3 text-base leading-7 text-slate-600">{result.detail}</p>
+            <div className="mt-5 rounded-md bg-slate-100 p-4">
+              <p className="text-sm font-medium text-slate-500">Score</p>
+              <p className="mt-1 text-2xl font-semibold">{result.score}</p>
+            </div>
+            <ul className="mt-5 grid gap-2 text-sm text-slate-600">
+              {brief.features.map((feature) => (
+                <li key={feature} className="rounded-md bg-emerald-50 px-3 py-2 text-emerald-800">{feature}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="flex gap-3">
+            <button onClick={downloadCard} className="inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-slate-950 px-4 py-3 text-sm font-semibold text-white">
+              <Download size={18} />
+              Download
+            </button>
+            <button onClick={resetValues} className="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-3 text-slate-700">
+              <RefreshCcw size={18} />
+            </button>
+          </div>
+
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-900">
+            {brief.disclaimer}
+          </div>
+        </aside>
+      </section>
+    </main>
+  );
+}
+
+function renderInput(input: InputDefinition, value: FieldValue | undefined, updateValue: (id: string, value: FieldValue) => void) {
+  const baseClass = "w-full rounded-md border border-slate-300 bg-white px-3 py-3 text-base text-slate-950 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100";
+  if (input.type === "number") {
+    return <input className={baseClass} type="number" value={Number(value ?? 0)} onChange={(event) => updateValue(input.id, Number(event.target.value))} />;
+  }
+  if (input.type === "checkbox") {
+    return (
+      <input
+        className="h-6 w-6 rounded border-slate-300 text-emerald-600"
+        type="checkbox"
+        checked={Boolean(value)}
+        onChange={(event) => updateValue(input.id, event.target.checked)}
+      />
+    );
+  }
+  if (input.type === "select") {
+    return (
+      <select className={baseClass} value={String(value ?? "")} onChange={(event) => updateValue(input.id, event.target.value)}>
+        {(input.options ?? []).map((option) => (
+          <option key={option} value={option}>{option}</option>
+        ))}
+      </select>
+    );
+  }
+  return <input className={baseClass} type="text" placeholder={input.placeholder} value={String(value ?? "")} onChange={(event) => updateValue(input.id, event.target.value)} />;
+}
+
+function computeResult(productType: string, values: Record<string, FieldValue>): Result {
+  const numbers = Object.values(values)
+    .map((value) => (typeof value === "number" ? value : Number(value)))
+    .filter((value) => Number.isFinite(value));
+  const total = numbers.reduce((sum, value) => sum + value, 0);
+  const checked = Object.values(values).filter((value) => value === true).length;
+  const text = Object.values(values).filter((value) => typeof value === "string" && value.trim().length > 0).join(", ");
+
+  if (productType === "calculator") {
+    return { headline: "$" + total.toFixed(2) + " / month", detail: "Estimated annual impact: $" + (total * 12).toFixed(2) + ".", score: String(Math.round(total * 12)) };
+  }
+  if (productType === "checklist") {
+    const checkboxCount = Math.max(1, brief.inputs.filter((input) => input.type === "checkbox").length);
+    const percent = Math.round((checked / checkboxCount) * 100);
+    return { headline: percent + "% ready", detail: percent >= 70 ? "You have the main pieces in place." : "Pick one missing item and improve it before sharing.", score: String(percent) };
+  }
+  if (productType === "quiz") {
+    const score = Math.max(0, Math.min(100, 100 - Math.round(total / 2) + checked * 10));
+    return { headline: score + "/100", detail: score >= 70 ? "Your setup looks controlled." : "Start with the highest-friction area and reduce one source of clutter.", score: String(score) };
+  }
+  if (productType === "converter") {
+    const first = numbers[0] ?? 0;
+    const second = Math.max(1, numbers[1] ?? 1);
+    const rate = first / second;
+    return { headline: rate.toFixed(2) + " per unit", detail: "Use this as a quick equivalent for comparing options.", score: rate.toFixed(2) };
+  }
+  if (productType === "tier-list-maker") {
+    const average = numbers.length ? total / numbers.length : 0;
+    const tier = average >= 8 ? "S" : average >= 6 ? "A" : average >= 4 ? "B" : "C";
+    return { headline: "Tier " + tier, detail: "Ranking based on the scores you entered for " + (text || "this item") + ".", score: tier };
+  }
+  if (productType === "share-card-maker") {
+    return { headline: text || "Your share card", detail: "Download this local browser-rendered card and post it where useful.", score: "Ready" };
+  }
+  if (productType === "planner" || productType === "generator") {
+    return { headline: text || "Draft ready", detail: "Use the inputs as your starting point, then tighten the language before publishing.", score: String(Math.max(1, Math.round(total || checked || 1))) };
+  }
+  return { headline: String(Math.round(total + checked * 10)), detail: "Result generated from your current inputs.", score: String(Math.round(total + checked * 10)) };
+}
+
+export default App;
+`;
+}
+
+function generatedStyles(): string {
+  return [
+    "@tailwind base;",
+    "@tailwind components;",
+    "@tailwind utilities;",
+    "",
+    "body {",
+    "  margin: 0;",
+    "  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif;",
+    "}",
+    "",
+    "button {",
+    "  cursor: pointer;",
+    "}",
+    ""
+  ].join("\n");
+}
+
+function generatedViteConfig(): string {
+  return [
+    'import { defineConfig } from "vite";',
+    'import react from "@vitejs/plugin-react";',
+    "",
+    "export default defineConfig({",
+    "  plugins: [react()]",
+    "});",
+    ""
+  ].join("\n");
+}
+
+function generatedTsconfig(): Record<string, unknown> {
+  return {
+    compilerOptions: {
+      target: "ES2020",
+      useDefineForClassFields: true,
+      lib: ["DOM", "DOM.Iterable", "ES2020"],
+      allowJs: false,
+      skipLibCheck: true,
+      esModuleInterop: true,
+      allowSyntheticDefaultImports: true,
+      strict: true,
+      forceConsistentCasingInFileNames: true,
+      module: "ESNext",
+      moduleResolution: "Node",
+      resolveJsonModule: true,
+      isolatedModules: true,
+      noEmit: true,
+      jsx: "react-jsx"
+    },
+    include: ["src"],
+    references: []
+  };
+}
+
+function generatedTailwindConfig(): string {
+  return [
+    "/** @type {import('tailwindcss').Config} */",
+    "export default {",
+    '  content: ["./index.html", "./src/**/*.{ts,tsx}"],',
+    "  theme: {",
+    "    extend: {}",
+    "  },",
+    "  plugins: []",
+    "};",
+    ""
+  ].join("\n");
+}
+
+function generatedPostcssConfig(): string {
+  return [
+    "export default {",
+    "  plugins: {",
+    "    tailwindcss: {},",
+    "    autoprefixer: {}",
+    "  }",
+    "};",
+    ""
+  ].join("\n");
+}
+
+function escapeHtml(value: string): string {
+  return value.replace(/[&<>"']/g, (char) => {
+    const entities: Record<string, string> = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    };
+    return entities[char] ?? char;
+  });
+}

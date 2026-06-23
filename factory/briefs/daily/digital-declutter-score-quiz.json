@@ -1,0 +1,56 @@
+{
+  "slug": "digital-declutter-score-quiz",
+  "productType": "quiz",
+  "title": "Digital Declutter Score Quiz",
+  "description": "Score your digital clutter across tabs, inboxes, subscriptions, files, and notification habits.",
+  "keywords": [
+    "digital declutter",
+    "productivity quiz",
+    "inbox cleanup",
+    "focus tool"
+  ],
+  "audience": "People reducing digital overload",
+  "trendAngle": "Digital minimalism is expanding from files into subscriptions, AI tools, and notifications.",
+  "features": [
+    "Clutter score",
+    "Next action",
+    "Shareable result"
+  ],
+  "inputs": [
+    {
+      "id": "tabs",
+      "label": "Open tabs",
+      "type": "number",
+      "defaultValue": 18
+    },
+    {
+      "id": "inbox",
+      "label": "Unread inbox count",
+      "type": "number",
+      "defaultValue": 80
+    },
+    {
+      "id": "notifications",
+      "label": "Notifications feel controlled",
+      "type": "checkbox",
+      "defaultValue": false
+    }
+  ],
+  "outputs": [
+    {
+      "id": "score",
+      "label": "Declutter score"
+    }
+  ],
+  "faq": [
+    {
+      "question": "What does the score mean?",
+      "answer": "It is a directional signal to help choose a cleanup starting point."
+    },
+    {
+      "question": "Does it inspect my files or inbox?",
+      "answer": "No. You enter values manually and nothing external is read."
+    }
+  ],
+  "disclaimer": "This quiz is a personal productivity aid and does not inspect private accounts or files."
+}

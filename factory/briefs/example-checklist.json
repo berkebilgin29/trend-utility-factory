@@ -1,0 +1,22 @@
+{
+  "slug": "ai-meeting-readiness-checklist",
+  "productType": "checklist",
+  "title": "AI Meeting Readiness Checklist",
+  "description": "Check whether a meeting has enough context, decisions, and follow-up structure for useful AI notes.",
+  "keywords": ["meeting checklist", "AI notes", "meeting prep", "productivity"],
+  "audience": "Remote teams using AI note takers or meeting summaries",
+  "trendAngle": "Teams are adopting AI meeting tools but still need better meeting inputs.",
+  "features": ["Readiness score", "Missing prep items", "Printable checklist"],
+  "inputs": [
+    { "id": "agenda", "label": "Clear agenda", "type": "checkbox", "defaultValue": true },
+    { "id": "decision", "label": "Decision needed is stated", "type": "checkbox", "defaultValue": false },
+    { "id": "owners", "label": "Owners are assigned", "type": "checkbox", "defaultValue": false }
+  ],
+  "outputs": [{ "id": "readiness", "label": "Readiness score" }],
+  "faq": [
+    { "question": "Who is this checklist for?", "answer": "It is for anyone preparing meetings that will be summarized or actioned later." },
+    { "question": "Does it replace meeting notes?", "answer": "No. It helps improve the structure before notes are captured." }
+  ],
+  "disclaimer": "This checklist is a productivity aid, not a compliance or legal record."
+}
+

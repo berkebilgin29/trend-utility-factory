@@ -1,0 +1,22 @@
+{
+  "name": "trend-utility-factory",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "brief:create": "tsx factory/scripts/createBrief.ts",
+    "create:project": "tsx factory/scripts/createProject.ts",
+    "create:batch": "tsx factory/scripts/createBatch.ts",
+    "qa": "tsx factory/scripts/qa.ts",
+    "factory:daily": "tsx factory/scripts/factoryDaily.ts",
+    "typecheck": "tsc --noEmit",
+    "build:sample": "tsx factory/scripts/buildSample.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.8.0",
+    "zod": "^3.25.0"
+  }
+}
+

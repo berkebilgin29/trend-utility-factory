@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+factory/generated-projects/*/node_modules/
+factory/generated-projects/*/dist/
+factory/generated-projects/*/package-lock.json
