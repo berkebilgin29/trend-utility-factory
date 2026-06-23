@@ -1,0 +1,27 @@
+{
+  "slug": "study-plan-generator",
+  "productType": "planner",
+  "title": "Study Plan Generator",
+  "description": "Generate a daily study plan from your exam timeline, subject count, and available study hours.",
+  "keywords": ["study plan generator", "exam study planner", "daily study schedule"],
+  "audience": "Students preparing for exams, certifications, finals, and self-paced learning goals",
+  "trendAngle": "Students are using lightweight planners to organize exam prep and avoid last-minute cramming.",
+  "features": ["Daily study schedule", "Subject rotation prompt", "Time budget estimate", "Shareable plan summary"],
+  "inputs": [
+    { "id": "days-until-exam", "label": "Days until exam", "type": "number", "defaultValue": 21 },
+    { "id": "subjects", "label": "Number of subjects or topics", "type": "number", "defaultValue": 4 },
+    { "id": "daily-hours", "label": "Daily available study hours", "type": "number", "defaultValue": 2 },
+    { "id": "priority", "label": "Main study priority", "type": "select", "options": ["Review", "Practice tests", "Weak topics", "Balanced"], "defaultValue": "Balanced" }
+  ],
+  "outputs": [
+    { "id": "study-load", "label": "Estimated study load" },
+    { "id": "daily-plan", "label": "Daily study plan" }
+  ],
+  "faq": [
+    { "question": "Can this create a full exam calendar?", "answer": "It creates a simple daily planning estimate that you can copy into a calendar or task app." },
+    { "question": "What if I have multiple exams?", "answer": "Use the closest or highest-priority exam first, then create separate plans for other exams." },
+    { "question": "Does this guarantee better grades?", "answer": "No. It helps structure study time, but outcomes depend on preparation quality, course difficulty, and exam conditions." }
+  ],
+  "disclaimer": "This planner is an educational planning aid and does not guarantee academic results."
+}
+

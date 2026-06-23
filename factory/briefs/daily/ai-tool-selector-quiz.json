@@ -1,0 +1,27 @@
+{
+  "slug": "ai-tool-selector-quiz",
+  "productType": "quiz",
+  "title": "AI Tool Selector Quiz",
+  "description": "Choose a practical AI tool category based on your task, output format, and workflow needs.",
+  "keywords": ["AI tool quiz", "which AI tool should I use", "best AI tool for my task"],
+  "audience": "People deciding which category of AI tool fits writing, research, images, coding, automation, or planning tasks",
+  "trendAngle": "The AI tool market is crowded, and users need simple guidance before comparing specific products.",
+  "features": ["Task-fit quiz", "AI category recommendation", "Workflow readiness score", "No brand-specific ranking"],
+  "inputs": [
+    { "id": "task-type", "label": "Main task type", "type": "select", "options": ["Writing", "Research", "Images", "Coding", "Automation", "Planning"], "defaultValue": "Writing" },
+    { "id": "output-urgency", "label": "Need quick output", "type": "checkbox", "defaultValue": true },
+    { "id": "complexity", "label": "Task complexity from 1 to 10", "type": "number", "defaultValue": 5 },
+    { "id": "collaboration", "label": "Needs team collaboration", "type": "checkbox", "defaultValue": false }
+  ],
+  "outputs": [
+    { "id": "recommended-category", "label": "Recommended AI tool category" },
+    { "id": "fit-score", "label": "Task fit score" }
+  ],
+  "faq": [
+    { "question": "Does this recommend specific AI brands?", "answer": "No. It recommends broad tool categories so users can compare options without brand bias." },
+    { "question": "Can one AI tool handle every task?", "answer": "Sometimes, but specialized tools can be better for images, coding, automation, or team workflows." },
+    { "question": "Does this call an AI API?", "answer": "No. The generated app uses local deterministic quiz logic and does not call external services." }
+  ],
+  "disclaimer": "This quiz is informational only. Review privacy, pricing, accuracy, and data-use terms before using any AI tool."
+}
+

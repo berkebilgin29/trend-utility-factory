@@ -1,0 +1,28 @@
+{
+  "slug": "phone-total-cost-calculator",
+  "productType": "calculator",
+  "title": "Phone Total Cost Calculator",
+  "description": "Calculate the estimated total cost of a phone with down payment, installments, interest, and accessories.",
+  "keywords": ["phone cost calculator", "monthly phone payment calculator", "phone installment calculator"],
+  "audience": "Shoppers comparing phone payment plans, installments, accessories, and upfront costs",
+  "trendAngle": "Phone buyers are comparing installment offers and total ownership costs before upgrading devices.",
+  "features": ["Monthly payment estimate", "Total cost estimate", "Accessory cost inclusion", "Finance disclaimer"],
+  "inputs": [
+    { "id": "phone-price", "label": "Phone price", "type": "number", "defaultValue": 899 },
+    { "id": "down-payment", "label": "Down payment", "type": "number", "defaultValue": 150 },
+    { "id": "installments", "label": "Installment count", "type": "number", "defaultValue": 24 },
+    { "id": "interest-rate", "label": "Interest rate percent", "type": "number", "defaultValue": 8 },
+    { "id": "accessories", "label": "Accessories and setup cost", "type": "number", "defaultValue": 80 }
+  ],
+  "outputs": [
+    { "id": "monthly-payment", "label": "Estimated monthly payment" },
+    { "id": "total-cost", "label": "Estimated total phone cost" }
+  ],
+  "faq": [
+    { "question": "Does this include taxes and carrier fees?", "answer": "Only if you add them to the phone price or accessory fields. Real offers may include taxes, activation fees, and plan charges." },
+    { "question": "Is the interest calculation exact?", "answer": "No. It is a simple estimate for comparison. Lenders and carriers may calculate financing differently." },
+    { "question": "Should I use this before buying a phone?", "answer": "Yes, it can help compare options, but always check the official contract and payment terms." }
+  ],
+  "disclaimer": "This calculator is for planning only and is not financial advice. Confirm official installment, tax, fee, and interest terms before purchase."
+}
+

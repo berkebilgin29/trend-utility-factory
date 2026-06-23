@@ -1,0 +1,27 @@
+{
+  "slug": "subscription-cost-tracker",
+  "productType": "tracker",
+  "title": "Subscription Cost Tracker",
+  "description": "Track monthly and yearly subscription costs across streaming, apps, memberships, and digital tools.",
+  "keywords": ["subscription cost tracker", "monthly subscription calculator", "streaming subscription cost"],
+  "audience": "People reviewing recurring subscriptions and reducing monthly expenses",
+  "trendAngle": "Households are auditing recurring streaming, app, AI, and creator-tool subscriptions as monthly costs rise.",
+  "features": ["Monthly cost total", "Yearly cost estimate", "Local saved values", "Shareable result card"],
+  "inputs": [
+    { "id": "streaming", "label": "Streaming subscriptions per month", "type": "number", "defaultValue": 35 },
+    { "id": "apps", "label": "App and software subscriptions per month", "type": "number", "defaultValue": 20 },
+    { "id": "memberships", "label": "Memberships and creator subscriptions per month", "type": "number", "defaultValue": 15 },
+    { "id": "other", "label": "Other recurring subscriptions per month", "type": "number", "defaultValue": 10 }
+  ],
+  "outputs": [
+    { "id": "monthly-total", "label": "Monthly subscription total" },
+    { "id": "yearly-total", "label": "Yearly subscription total" }
+  ],
+  "faq": [
+    { "question": "What subscriptions should I include?", "answer": "Include streaming apps, cloud storage, AI tools, creator memberships, mobile apps, and any recurring digital payment." },
+    { "question": "Does this connect to my bank account?", "answer": "No. You enter the numbers manually, and the generated app stores values locally in your browser." },
+    { "question": "How often should I review subscriptions?", "answer": "A monthly or quarterly review is usually enough to catch unused recurring costs before they build up." }
+  ],
+  "disclaimer": "This tracker is for budgeting and planning only and is not financial advice."
+}
+

@@ -1,0 +1,27 @@
+{
+  "slug": "travel-packing-checklist",
+  "productType": "checklist",
+  "title": "Travel Packing Checklist",
+  "description": "Generate a practical packing checklist based on trip length, expected weather, and travel type.",
+  "keywords": ["travel packing checklist", "packing list generator", "vacation packing checklist"],
+  "audience": "Travelers preparing for vacations, work trips, weekend breaks, and family travel",
+  "trendAngle": "People are searching for faster personalized packing lists as travel rebounds and baggage fees stay high.",
+  "features": ["Trip-based checklist", "Weather-aware packing prompts", "Travel-type reminder score", "Printable checklist style"],
+  "inputs": [
+    { "id": "trip-days", "label": "Trip length in days", "type": "number", "defaultValue": 5 },
+    { "id": "weather", "label": "Expected weather", "type": "select", "options": ["Warm", "Cold", "Rainy", "Mixed"], "defaultValue": "Mixed" },
+    { "id": "travel-type", "label": "Travel type", "type": "select", "options": ["Vacation", "Business", "Family", "Weekend"], "defaultValue": "Vacation" },
+    { "id": "carry-on-only", "label": "Carry-on only", "type": "checkbox", "defaultValue": false }
+  ],
+  "outputs": [
+    { "id": "packing-score", "label": "Packing readiness score" },
+    { "id": "packing-reminders", "label": "Packing reminder list" }
+  ],
+  "faq": [
+    { "question": "Can this replace a full travel checklist?", "answer": "It gives a fast starting point, but you should still add destination-specific items, documents, medication, and chargers." },
+    { "question": "Does this know airline baggage rules?", "answer": "No. Check your airline and destination rules before packing liquids, batteries, or restricted items." },
+    { "question": "Is the list saved?", "answer": "The generated app stores your current checklist values locally in the browser." }
+  ],
+  "disclaimer": "This checklist is a planning aid only. Always verify airline, destination, weather, document, and safety requirements before travel."
+}
+
