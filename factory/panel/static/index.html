@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trend Utility Factory Panel</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Local control panel</p>
+          <h1>Trend Utility Factory</h1>
+          <p class="subtle">Daily robot pipeline, provider choices, token estimates, QA and build status.</p>
+        </div>
+        <button id="refreshButton">Refresh</button>
+      </header>
+
+      <section class="grid hero-grid">
+        <article class="panel">
+          <h2>Today</h2>
+          <div class="metric-row">
+            <div>
+              <span class="metric" id="briefCount">0</span>
+              <span class="label">daily briefs</span>
+            </div>
+            <div>
+              <span class="metric" id="projectCount">0</span>
+              <span class="label">generated projects</span>
+            </div>
+          </div>
+          <div class="actions">
+            <button data-action="research">Research</button>
+            <button data-action="dryDaily">Dry run</button>
+            <button data-action="generateDaily">Generate daily</button>
+            <button data-action="qa">QA</button>
+          </div>
+        </article>
+
+        <article class="panel accent">
+          <h2>Token Estimate</h2>
+          <p class="large" id="totalTokens">0 tokens</p>
+          <p id="tokenNote" class="subtle"></p>
+          <div class="mini-grid">
+            <span>Per project</span>
+            <strong id="perProjectTokens">0</strong>
+            <span>Paid API tokens</span>
+            <strong id="paidTokens">0</strong>
+            <span>Local Ollama tokens</span>
+            <strong id="localTokens">0</strong>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <h2>Pipeline Providers</h2>
+            <p class="subtle">Default setup avoids paid API calls. ChatGPT/Gemini are manual review stages unless you later wire explicit APIs.</p>
+          </div>
+          <button id="saveConfigButton">Save config</button>
+        </div>
+        <div class="stage-grid" id="stageGrid"></div>
+      </section>
+
+      <section class="grid">
+        <article class="panel">
+          <h2>Target Project</h2>
+          <label class="field">
+            Project slug
+            <select id="projectSelect"></select>
+          </label>
+          <div class="actions">
+            <button data-action="review">Review selected</button>
+            <button data-action="build">Build selected</button>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h2>Daily Briefs</h2>
+          <ul id="briefList" class="list"></ul>
+        </article>
+      </section>
+
+      <section class="panel">
+        <h2>Current / Recent Work</h2>
+        <div id="jobs" class="jobs"></div>
+      </section>
+    </main>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
+

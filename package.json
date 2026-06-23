@@ -12,6 +12,7 @@
     "agent:research": "tsx factory/scripts/agentResearch.ts",
     "agent:daily": "tsx factory/scripts/agentDaily.ts",
     "agent:review": "tsx factory/scripts/agentReview.ts",
+    "panel": "tsx factory/panel/server.ts",
     "typecheck": "tsc --noEmit",
     "build:sample": "tsx factory/scripts/buildSample.ts"
   },
